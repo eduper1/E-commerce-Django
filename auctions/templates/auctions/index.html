@@ -1,7 +1,17 @@
-{% extends "auctions/layout.html" %}
+{% extends "auctions/layout.html" %} {% load static %} {% block body %}
+<h2>Active Listings</h2>
 
-{% block body %}
-    <h2>Active Listings</h2>
+TODO {% for list in listings %}
+<a href="{% url 'auctions_list' list.id %}">
+    <div>
+        <h2>{{list.auc_title}}</h2>
+        {{list.id}}
+        <img src="{{list.auc_image.url}}" alt="rose flower" width="100px" height="auto">
+        <details>{{list.auc_details}}</details>
+        <p>Price: {{list.auc_price}}</p>
+        <p>Date published: {{list.auc_date_published}}
+        </p>
+    </div>
+</a>
 
-    TODO
-{% endblock %}
+{% endfor %} {% endblock %}
