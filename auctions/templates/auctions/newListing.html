@@ -1,0 +1,14 @@
+{% extends 'auctions/layout.html' %} {% load static %} {% block body %}
+<h2>Create new listing</h2>
+<form action="{% url 'create_listing' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %} {{form.as_ul}}
+    <button type=" submit ">Create</button>
+    <!--<select name="passenger " id=" ">
+        {% for passenger in non_passenger %}
+            <option value="{{ passenger.id }} ">{{passenger}}</option>
+        {% endfor %}
+    </select>
+    <input type="submit " value="Submit ">-->
+</form>
+
+{% endblock body %}

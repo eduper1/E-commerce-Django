@@ -1,8 +1,9 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import REDIRECT_FIELD_NAME, authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from . import forms
 
 from .models import *
 
@@ -15,12 +16,46 @@ def index(request):
     })
     
 def list_page(request, list_id):
-    list_auction = Auction_listings.objects.get(pk=list_id)
-    return render(request, "auctions/auc_details.html", {
-        "details": list_auction,
-        #"": list_auction..all(),
-        #"non_passenger": Passenger.objects.exclude(flights=flight).all()
+    if request.user.is_authenticated:
+        list_auction = Auction_listings.objects.get(pk=list_id)
+        #comment_form = forms.Create_comment()
+        return render(request, "auctions/auc_details.html", {
+            "detail": list_auction,
+         #   "form": comment_form
+            #"": list_auction..all(),
+            #"non_passenger": Passenger.objects.exclude(flights=flight).all()
+        })
+    else:
+        list_auction = Auction_listings.objects.get(pk=list_id)
+        return render(request, "auctions/auc_details.html", {
+            "detail": list_auction,
+            #"form": comment_form()
+            #"": list_auction..all(),
+            #"non_passenger": Passenger.objects.exclude(flights=flight).all()
+        })
+
+#@login_required(REDIRECT_FIELD_NAME= "login")
+def create_listing(request):
+    form = forms.Create_listing(request.POST,request.FILES)
+    if request.method == "POST":
+        form = form
+        if form.is_valid():
+            form.save()
+            #listing = Auction_listings.objects(form)
+            #listing.save()        
+    return render (request,"auctions/newListing.html", {
+        "form": form
     })
+        
+"""
+def comment(request):
+    if request.user.is_authenticated:
+        comment_form = forms.Create_comment()
+        return render (request, "auctions/auc_details.html",{
+            "form": comment_form
+        })
+
+"""        
 
 
 def login_view(request):
