@@ -21,6 +21,7 @@ def list_page(request, list_id):
         #comment_form = forms.Create_comment()
         return render(request, "auctions/auc_details.html", {
             "detail": list_auction,
+            "category": Category.type.all(),
          #   "form": comment_form
             #"": list_auction..all(),
             #"non_passenger": Passenger.objects.exclude(flights=flight).all()
@@ -37,15 +38,22 @@ def list_page(request, list_id):
 #@login_required(REDIRECT_FIELD_NAME= "login")
 def create_listing(request):
     form = forms.Create_listing(request.POST,request.FILES)
-    if request.method == "POST":
-        form = form
-        if form.is_valid():
-            form.save()
-            #listing = Auction_listings.objects(form)
-            #listing.save()        
-    return render (request,"auctions/newListing.html", {
-        "form": form
-    })
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            form = form
+            if form.is_valid():
+                text = form.data["auc_created_by"]
+                text = request.user
+                form.save()
+                #listing = Auction_listings.objects(form)
+                #listing.save()
+            else:
+                return render(request, "auctions/newListing.html",{
+                    "form":form,
+                })        
+        return render (request,"auctions/newListing.html", {
+            "form": forms.Create_listing()
+        })
         
 """
 def comment(request):

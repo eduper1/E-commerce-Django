@@ -4,7 +4,7 @@
     <img src="{{detail.auc_image.url}}" alt="rose flower" width="100px" height="auto">
     <details>{{detail.auc_details}}</details>
     <p>Price: {{detail.auc_price}}</p>
-    <p>Date published: {{detail.auc_date_published}}
+    <p>Date published: {{detail.auc_date_published}} {{category}}
     </p>
     <form action="" method="POST">
         {% csrf_token %} {{form}}

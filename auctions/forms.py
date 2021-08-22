@@ -5,10 +5,10 @@ from . import models
 class Create_listing(forms.ModelForm):
     class Meta:
         model = models.Auction_listings
-        fields = ['auc_title', 'auc_details', 'auc_price', 'auc_created_by', 'auc_image']
+        fields = ['auc_title', 'auc_details', 'auc_price', 'auc_image', 'auc_category', "auc_created_by"]
         
         
 class Create_comment(forms.ModelForm):
     class Meta:
         form_model = models.Comment
-        form_fields = ['comment_by', 'comment_on', 'comment']
+        form_fields = ['comment_on', 'comment']

@@ -6,6 +6,8 @@ from django.db import models
 class User(AbstractUser):
     pass
 
+
+
 class Auction_listings(models.Model):
     auc_title = models.CharField(max_length=50)
     auc_details = models.CharField(max_length=250)
@@ -15,7 +17,15 @@ class Auction_listings(models.Model):
     auc_image = models.ImageField(default='rose.jpg', blank=True)
     
     def __str__(self):
-        return f"{self.auc_title} {self.auc_details} {self.auc_date_published} "
+        return f"{self.auc_title}"
+
+
+class Category(models.Model):
+    category_type = models.TextField()
+    auctions = models.ManyToManyField(Auction_listings, blank= True, related_name="auction")
+    
+    def __str__(self):
+        return f"{self.category_type}"
         
 class Bid(models.Model):
     bid_by = models.ForeignKey(User, related_name="user", on_delete=models.CASCADE)
@@ -33,5 +43,5 @@ class Comment(models.Model):
     comment_date_published = models.DateTimeField()
     
     def __str__(self):
-        return f"{self.comment_by} {self.comment} {self.comment_date_published} {self.comment_on}"
+        return f"{self.comment}"
         
