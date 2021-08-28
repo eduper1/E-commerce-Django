@@ -19,9 +19,12 @@ def list_page(request, list_id):
     if request.user.is_authenticated:
         list_auction = Auction_listings.objects.get(pk=list_id)
         #comment_form = forms.Create_comment()
+        categories = Category.objects.get(pk = list_id)
+        #categories.auctions.add(list_auction)
         return render(request, "auctions/auc_details.html", {
             "detail": list_auction,
-            "category": Category.type.all(),
+            "cat":categories,
+            "user": request.user,
          #   "form": comment_form
             #"": list_auction..all(),
             #"non_passenger": Passenger.objects.exclude(flights=flight).all()

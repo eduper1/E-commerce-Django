@@ -21,11 +21,11 @@ class Auction_listings(models.Model):
 
 
 class Category(models.Model):
-    category_type = models.TextField()
+    category_type = models.TextField(blank=True)
     auctions = models.ManyToManyField(Auction_listings, blank= True, related_name="auction")
     
     def __str__(self):
-        return f"{self.category_type}"
+        return f"Type :{self.category_type} {self.auctions}"
         
 class Bid(models.Model):
     bid_by = models.ForeignKey(User, related_name="user", on_delete=models.CASCADE)
