@@ -23,9 +23,9 @@ def list_page(request, list_id):
         #categories.auctions.add(list_auction)
         return render(request, "auctions/auc_details.html", {
             "detail": list_auction,
-            "cat":categories,
+            "cats":categories,
             "user": request.user,
-         #   "form": comment_form
+            #"form": comment_form
             #"": list_auction..all(),
             #"non_passenger": Passenger.objects.exclude(flights=flight).all()
         })

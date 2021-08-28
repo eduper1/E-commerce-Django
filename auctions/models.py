@@ -7,6 +7,11 @@ class User(AbstractUser):
     pass
 
 
+class Category(models.Model):
+    category_type = models.TextField(blank=True)
+    
+    def __str__(self):
+        return f"Type :{self.category_type}"
 
 class Auction_listings(models.Model):
     auc_title = models.CharField(max_length=50)
@@ -15,17 +20,11 @@ class Auction_listings(models.Model):
     auc_date_published = models.DateTimeField(auto_now_add=True)
     auc_created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="creator", blank=True)
     auc_image = models.ImageField(default='rose.jpg', blank=True)
+    auctions = models.ManyToManyField(Category, blank= True, related_name="category")
     
     def __str__(self):
         return f"{self.auc_title}"
 
-
-class Category(models.Model):
-    category_type = models.TextField(blank=True)
-    auctions = models.ManyToManyField(Auction_listings, blank= True, related_name="auction")
-    
-    def __str__(self):
-        return f"Type :{self.category_type} {self.auctions}"
         
 class Bid(models.Model):
     bid_by = models.ForeignKey(User, related_name="user", on_delete=models.CASCADE)

@@ -13,7 +13,7 @@ class Bid_admin(admin.ModelAdmin):
     
 
 class Category_admin(admin.ModelAdmin):
-   list_display = ("id", "category_type")
+   list_display = ("id","category_type" )
 
 admin.site.register(User)
 admin.site.register(Auction_listings)

@@ -6,7 +6,8 @@
     <p>Price: {{detail.auc_price}}</p>
     <p>Date published: {{detail.auc_date_published}} </p>
     <p>
-        {{cat.category_type}} <br> created by: {{user}} <br> {{detail.auc_created_by}}
+        {{cats.category_type}}
+        <!--{{detail.auctions.category}}--><br> created by: {{user}} <br> {{detail.auc_created_by}}
     </p>
     <form action="" method="POST">
         {% csrf_token %} {{form}}
