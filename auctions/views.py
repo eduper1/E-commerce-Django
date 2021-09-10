@@ -12,21 +12,23 @@ def index(request):
     listings = Auction_listings.objects.all()
     return render(request, "auctions/index.html", {
         "amounts": Bid.objects.all(),
-        "listings": listings
+        "listings": listings,
+        "categories": Category.objects.all(),
     })
     
 def list_page(request, list_id):
     if request.user.is_authenticated:
         list_auction = Auction_listings.objects.get(pk=list_id)
         #comment_form = forms.Create_comment()
+        #comments = Comment.objects.get(pk = list_id)
         categories = Category.objects.get(pk = list_id)
         #categories.auctions.add(list_auction)
         return render(request, "auctions/auc_details.html", {
             "detail": list_auction,
             "cats":categories,
             "user": request.user,
-            #"form": comment_form
-            #"": list_auction..all(),
+            "comments": list_auction.comment.all(),
+            #"commentForm": comment_form,
             #"non_passenger": Passenger.objects.exclude(flights=flight).all()
         })
     else:
@@ -46,7 +48,7 @@ def create_listing(request):
             form = form
             if form.is_valid():
                 text = form.data["auc_created_by"]
-                text = request.user
+                #text = text.request.user
                 form.save()
                 #listing = Auction_listings.objects(form)
                 #listing.save()

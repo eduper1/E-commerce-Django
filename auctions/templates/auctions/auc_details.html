@@ -6,11 +6,26 @@
     <p>Price: {{detail.auc_price}}</p>
     <p>Date published: {{detail.auc_date_published}} </p>
     <p>
-        {{cats.category_type}}
+
+        {% for cat in detail.auctions.all %} {{cat}} {% endfor %}
         <!--{{detail.auctions.category}}--><br> created by: {{user}} <br> {{detail.auc_created_by}}
     </p>
+    <br>
+    <div>
+        <h2>Comments</h2>
+        <p>{% for comment in comments %}
+            <ul>
+                <li>{{comment}}</li>
+            </ul>
+            {% empty %}
+            <ul>
+                <li> No comments currently </li>
+            </ul>
+            {% endfor %}
+        </p>
+    </div>
     <form action="" method="POST">
-        {% csrf_token %} {{form}}
+        {% csrf_token %}
     </form>
 </div>
 

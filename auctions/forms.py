@@ -11,4 +11,4 @@ class Create_listing(forms.ModelForm):
 class Create_comment(forms.ModelForm):
     class Meta:
         form_model = models.Comment
-        form_fields = ['comment_on', 'comment']
+        form_fields = ['comment',]
