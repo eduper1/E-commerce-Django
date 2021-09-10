@@ -24,9 +24,10 @@
             {% endfor %}
         </p>
     </div>
-    <form action="" method="POST">
-        {% csrf_token %}
-    </form>
 </div>
 
+<form action="{% url 'comment' %}" method="POST">
+    {% csrf_token %} {{form.as_ul}}
+    <button type=" submit ">Create</button>
+</form>
 {% endblock body %}

@@ -60,15 +60,22 @@ def create_listing(request):
             "form": forms.Create_listing()
         })
         
-"""
 def comment(request):
     if request.user.is_authenticated:
-        comment_form = forms.Create_comment()
+        comment_form = forms.Create_comment(request.POST)
+        if request.method == "POST":
+            comment_form = comment_form
+            if comment_form.is_valid():
+                comment_form.save()
+            else:
+                return(request, "auctions/auc_details.html",{
+                    "form":comment_form
+                })
         return render (request, "auctions/auc_details.html",{
-            "form": comment_form
-        })
+            "form": forms.Create_comment()
+                })
 
-"""        
+       
 
 
 def login_view(request):
