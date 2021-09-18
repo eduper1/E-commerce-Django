@@ -27,7 +27,9 @@
 </div>
 
 <form action="{% url 'comment' %}" method="POST">
-    {% csrf_token %} {{form.as_ul}}
+    {% csrf_token %}
+    <input type="text" name="text"></input>
+    <input type="hidden" name="auction_id" value="{{detail.id}}"></input>
     <button type=" submit ">Create</button>
 </form>
 {% endblock body %}

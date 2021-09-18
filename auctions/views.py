@@ -1,8 +1,9 @@
 from django.contrib.auth import REDIRECT_FIELD_NAME, authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse
+from datetime import datetime
 from . import forms
 
 from .models import *
@@ -60,15 +61,22 @@ def create_listing(request):
             "form": forms.Create_listing()
         })
         
-def comment(request):
+def comment(request, list_id):
+    list_auction = Auction_listings.objects.get(pk=list_id)
     if request.user.is_authenticated:
-        comment_form = forms.Create_comment(request.POST)
         if request.method == "POST":
+            comment_form = forms.Create_comment(request.POST)
             comment_form = comment_form
             if comment_form.is_valid():
+                comment = comment_form["text"]
+                last_id = Comment.id[-1]
+                new_id = last_id + 1
+                comment_datail = Comment(id = new_id, comment_by=request.user, comment_on=list_auction, comment=comment, comment_date_published=datetime.now())
                 comment_form.save()
+                return redirect('auctions_list', list_id=list_id,)
             else:
-                return(request, "auctions/auc_details.html",{
+                #pass
+                return render(request, "auctions/auc_details.html",{
                     "form":comment_form
                 })
         return render (request, "auctions/auc_details.html",{
