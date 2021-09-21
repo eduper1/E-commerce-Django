@@ -73,11 +73,20 @@ def comment(request, list_id):
                 new_id = last_id + 1
                 comment_detail = Comment(id = new_id, comment_by=request.user, comment_on=list_auction, comment=comment, comment_date_published=datetime.now())
                 comment_detail.save()
-                return HttpResponseRedirect(reverse("comment", args=(list_auction.id,)))
+                categories = Category.objects.get(pk = list_id)
+                return render(request, "auctions/auc_details.html", {
+                    "detail": list_auction,
+                    "cats":categories,
+                    "user": request.user,
+                    "comments": list_auction.comment.all(),
+                    #"commentForm": comment_form,
+                    #"non_passenger": Passenger.objects.exclude(flights=flight).all()
+                })  
+                #return HttpResponseRedirect(reverse("auctions_list", args=(list_auction.id,)))
             else:
                 #pass
                 return render(request, "auctions/auc_details.html",{
-                    "form":comment_form
+                    "form":comment_form,
                 })
         return render (request, "auctions/auc_details.html",{
             "form": forms.Create_comment()
