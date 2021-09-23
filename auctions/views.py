@@ -53,8 +53,8 @@ def create_listing(request):
 def comment(request, list_id):
     if request.user.is_authenticated:
         if request.method == "POST":
-            list_auction = Auction_listings.objects.get(pk=list_id)
             comment_form = forms.Create_comment(request.POST)
+            list_auction = Auction_listings.objects.get(pk=list_id)
             comment_form = comment_form
             if comment_form.is_valid():
                 comment = comment_form["text"]
@@ -62,7 +62,7 @@ def comment(request, list_id):
                 new_id = last_id + 1
                 comment_detail = Comment(id = new_id, comment_by=request.user, comment_on=list_auction, comment=comment, comment_date_published=datetime.now())
                 comment_detail.save() 
-                return reverse('auctions_list', args=[list_auction])
+                return redirect('auctions_list', list_id=list_auction)
             else:
                 #pass
                 return render(request, "auctions/auc_details.html",{
