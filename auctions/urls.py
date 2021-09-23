@@ -10,5 +10,6 @@ urlpatterns = [
     path("register", views.register, name="register"),
     path("<int:list_id>", views.list_page, name="auctions_list"),
     path("create", views.create_listing, name="create_listing"),
-    path("<int:list_id>/comment", views.comment, name="comment"),
+    path("comment/<int:list_id>", views.comment, name="comment"),
+    
 ]

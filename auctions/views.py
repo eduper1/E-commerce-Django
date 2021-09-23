@@ -20,25 +20,17 @@ def index(request):
 def list_page(request, list_id):
     if request.user.is_authenticated:
         list_auction = Auction_listings.objects.get(pk=list_id)
-        #comment_form = forms.Create_comment()
-        #comments = Comment.objects.get(pk = list_id)
         categories = Category.objects.get(pk = list_id)
-        #categories.auctions.add(list_auction)
         return render(request, "auctions/auc_details.html", {
             "detail": list_auction,
             "cats":categories,
             "user": request.user,
             "comments": list_auction.comment.all(),
-            #"commentForm": comment_form,
-            #"non_passenger": Passenger.objects.exclude(flights=flight).all()
         })
     else:
         list_auction = Auction_listings.objects.get(pk=list_id)
         return render(request, "auctions/auc_details.html", {
             "detail": list_auction,
-            #"form": comment_form()
-            #"": list_auction..all(),
-            #"non_passenger": Passenger.objects.exclude(flights=flight).all()
         })
 
 #@login_required(REDIRECT_FIELD_NAME= "login")
@@ -49,10 +41,7 @@ def create_listing(request):
             form = form
             if form.is_valid():
                 text = form.data["auc_created_by"]
-                #text = text.request.user
                 form.save()
-                #listing = Auction_listings.objects(form)
-                #listing.save()
             else:
                 return render(request, "auctions/newListing.html",{
                     "form":form,
@@ -72,17 +61,8 @@ def comment(request, list_id):
                 last_id = Comment.id[-1]
                 new_id = last_id + 1
                 comment_detail = Comment(id = new_id, comment_by=request.user, comment_on=list_auction, comment=comment, comment_date_published=datetime.now())
-                comment_detail.save()
-                # categories = Category.objects.get(pk = list_id)
-                # return render(request, "auctions/auc_details.html", {
-                #     "detail": list_auction,
-                #     "cats":categories,
-                #     "user": request.user,
-                #     "comments": list_auction.comment.all(),
-                #     #"commentForm": comment_form,
-                #     #"non_passenger": Passenger.objects.exclude(flights=flight).all()
-                # })  
-                return redirect('auctions_list', list_id=list_auction)
+                comment_detail.save() 
+                return reverse('auctions_list', args=[list_auction])
             else:
                 #pass
                 return render(request, "auctions/auc_details.html",{
@@ -93,7 +73,6 @@ def comment(request, list_id):
                 })
 
        
-
 
 def login_view(request):
     if request.method == "POST":
