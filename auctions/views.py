@@ -62,7 +62,8 @@ def comment(request, list_id):
                 new_id = last_id + 1
                 comment_detail = Comment(id = new_id, comment_by=request.user, comment_on=list_auction, comment=comment, comment_date_published=datetime.now())
                 comment_detail.save() 
-                return redirect('auctions_list', list_id=list_auction)
+                return HttpResponseRedirect(reverse("auctions_list", kwargs={'list_id': list_auction})) 
+                #return redirect('auctions_list', list_id=list_auction)
             else:
                 #pass
                 return render(request, "auctions/auc_details.html",{
