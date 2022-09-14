@@ -1,5 +1,6 @@
 from django.contrib.auth import REDIRECT_FIELD_NAME, authenticate, login, logout
 from django.db import IntegrityError
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -19,19 +20,24 @@ def index(request):
     
 def list_page(request, list_id):
     if request.user.is_authenticated:
-        list_auction = Auction_listings.objects.get(pk=list_id)
-        categories = Category.objects.get(pk = list_id)
+        list_auction = Auction_listings.objects.get(id=list_id)
+        categories = Category.objects.get(id = list_id)
+        comment_text = forms.Create_comment()
         return render(request, "auctions/auc_details.html", {
             "detail": list_auction,
             "cats":categories,
             "user": request.user,
             "comments": list_auction.comment.all(),
+            "com_form":comment_text,
         })
     else:
-        list_auction = Auction_listings.objects.get(pk=list_id)
+        list_auction = Auction_listings.objects.get(id =list_id)
         return render(request, "auctions/auc_details.html", {
-            "detail": list_auction,
+            "detail":list_auction
         })
+        # return render(request, "auctions/auc_details.html", {
+        #     "detail": list_auction,
+        # })
 
 #@login_required(REDIRECT_FIELD_NAME= "login")
 def create_listing(request):
@@ -50,28 +56,35 @@ def create_listing(request):
             "form": forms.Create_listing()
         })
         
-def comment(request, list_id):
+def comment(request,list_id):
     if request.user.is_authenticated:
-        if request.method == "POST":
-            comment_form = forms.Create_comment(request.POST)
-            list_auction = Auction_listings.objects.get(pk=list_id)
-            comment_form = comment_form
-            if comment_form.is_valid():
-                comment = comment_form["text"]
-                last_id = Comment.id[-1]
-                new_id = last_id + 1
-                comment_detail = Comment(id = new_id, comment_by=request.user, comment_on=list_auction, comment=comment, comment_date_published=datetime.now())
-                comment_detail.save() 
-                return HttpResponseRedirect(reverse("auctions_list", kwargs={'list_id': list_auction})) 
-                #return redirect('auctions_list', list_id=list_auction)
+        list_auction = Auction_listings.objects.get(pk=list_id)
+        if request.method == 'POST':
+            comment_text = forms.Create_comment(request.POST)
+            if comment_text.is_valid():
+                com_t = comment_text.save(commit=False)
+                # com_t.comment = comment_text["comment"]
+                com_t.comment_on = list_auction
+                com_t.comment_by = request.user
+                com_t.save()
+                # print(com_t)
+            
+                return HttpResponseRedirect(reverse("auctions_list", args=(list_auction.id,)))
             else:
-                #pass
-                return render(request, "auctions/auc_details.html",{
-                    "form":comment_form,
+                return render(request, "auctions/auc_details.html", {
+                    "detail": list_auction,
+                    # "cats":categories,
+                    "user": request.user,
+                    "comments": list_auction.comment.all(),
+                    "com_form":comment_text,
                 })
-        return render (request, "auctions/auc_details.html",{
-            "form": forms.Create_comment()
-                })
+        return render (request,"auctions/auc_details.html", {
+            "detail": list_auction,
+            "user": request.user,
+            "comments": list_auction.comment.all(),
+            "com_form":comment_text()
+        })
+            
 
        
 
