@@ -26,10 +26,9 @@
     </div>
 </div>
 
-<form action="{% url 'comment' detail.id %}" method="POST">
+<form action="{% url 'comment' detail.id%}" method="POST">
     {% csrf_token %}
-    <input type="text" name="text">
-    <input type="hidden" name="auction_id" value="{{detail.id}}">
+    {{com_form.as_p}}
     <button type=" submit ">Create</button>
 </form>
 {% endblock body %}
