@@ -25,10 +25,15 @@
         </p>
     </div>
 </div>
-
-<form action="{% url 'comment' detail.id%}" method="POST">
-    {% csrf_token %}
-    {{com_form.as_p}}
-    <button type=" submit ">Create</button>
-</form>
+{% if user.is_authenticated %}
+    <form action="{% url 'comment' detail.id%}" method="POST">
+        {% csrf_token %}
+        {{com_form.as_p}}
+        <button type=" submit ">Create</button>
+    </form>
+{% else %}
+    <p>
+    <a href="{% url 'login' %}">Sign in.</a> or  <a href="{% url 'register' %}">Sign up.</a> to comment on this post.
+    </p>
+{% endif %}
 {% endblock body %}
