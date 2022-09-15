@@ -21,7 +21,7 @@ def index(request):
 def list_page(request, list_id):
     if request.user.is_authenticated:
         list_auction = Auction_listings.objects.get(id=list_id)
-        categories = Category.objects.get(id = list_id)
+        categories = Category.objects.filter(id = list_id)
         comment_text = forms.Create_comment()
         return render(request, "auctions/auc_details.html", {
             "detail": list_auction,
@@ -61,7 +61,7 @@ def comment(request,list_id):
         list_auction = Auction_listings.objects.get(pk=list_id)
         if request.method == 'POST':
             comment_text = forms.Create_comment(request.POST)
-            if comment_text.is_valid():
+            if comment_text.is_valid():                                                                                                                                         
                 com_t = comment_text.save(commit=False)
                 # com_t.comment = comment_text["comment"]
                 com_t.comment_on = list_auction
