@@ -1,4 +1,5 @@
 from django.contrib.auth import REDIRECT_FIELD_NAME, authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
@@ -39,22 +40,6 @@ def list_page(request, list_id):
         #     "detail": list_auction,
         # })
 
-#@login_required(REDIRECT_FIELD_NAME= "login")
-def create_listing(request):
-    form = forms.Create_listing(request.POST,request.FILES)
-    if request.user.is_authenticated:
-        if request.method == "POST":
-            form = form
-            if form.is_valid():
-                text = form.data["auc_created_by"]
-                form.save()
-            else:
-                return render(request, "auctions/newListing.html",{
-                    "form":form,
-                })        
-        return render (request,"auctions/newListing.html", {
-            "form": forms.Create_listing()
-        })
         
 def comment(request,list_id):
     if request.user.is_authenticated:
@@ -85,6 +70,22 @@ def comment(request,list_id):
             "com_form":comment_text()
         })
             
+@login_required(login_url='login')
+def create_listing(request):
+    form = forms.Create_listing(request.POST,request.FILES)
+    # if request.user.is_authenticated:
+    if request.method == "POST":
+        form = form
+        if form.is_valid():
+            text = form.data["auc_created_by"]
+            form.save()
+        else:
+            return render(request, "auctions/newListing.html",{
+                "form":form,
+            })        
+    return render (request,"auctions/newListing.html", {
+        "form": forms.Create_listing()
+    })
 
        
 
@@ -138,3 +139,8 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
+
+@login_required(login_url='login')
+def watch_list(request):
+    pass
