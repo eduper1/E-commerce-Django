@@ -7,8 +7,8 @@
     <p>Date published: {{detail.auc_date_published}} </p>
     <p>
 
-        {% for cat in detail.auctions.all %} {{cat}} {% endfor %}
-        <!--{{detail.auctions.category}}--><br> created by: {{user}} <br> {{detail.auc_created_by}}
+        {% for cato in detail.auctions.all %} {{cato}} {% endfor %}
+        <!--{{detail.auctions.category}}--><br> created by: {{detail.auc_created_by}} <br> 
     </p>
     <br>
     <div>
