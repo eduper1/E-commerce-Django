@@ -12,7 +12,7 @@ from .models import *
 
 
 def index(request):
-    listings = Auction_listings.objects.all()
+    listings = Auction_listings.objects.all().order_by('-auc_date_published')
     return render(request, "auctions/index.html", {
         "amounts": Bid.objects.all(),
         "listings": listings,
@@ -24,12 +24,16 @@ def list_page(request, list_id):
         list_auction = Auction_listings.objects.get(id=list_id)
         categories = Category.objects.filter(id = list_id)
         comment_text = forms.Create_comment()
+        # fav = False
+        # if Auction_listings.fav_lists.get(id=request.user.id).exists():
+        #     fav = True
         return render(request, "auctions/auc_details.html", {
             "detail": list_auction,
             "cats":categories,
             "user": request.user,
             "comments": list_auction.comment.all(),
             "com_form":comment_text,
+            # "is_fav":fav,
         })
     else:
         list_auction = Auction_listings.objects.get(id =list_id)
@@ -143,4 +147,19 @@ def register(request):
 
 @login_required(login_url='login')
 def watch_list(request):
-    pass
+    # fav_w_l = Auction_listings.fav_lists.filter(id=request.user.id)
+    return render (request,"auctions/watchlist.html", {
+        "lists":  request.user.favorite.all(),
+        # "fav":fav_w_l,
+    })
+
+@login_required(login_url='login')
+def add_watch_list(request, list_id):
+    list_auction = Auction_listings.objects.get(id=list_id)
+    request.user.favorite.add(list_auction)
+    request.user.save()
+    # if list_auction.fav_lists.filter(id=request.user.id).exists():
+    #     list_auction.fav_lists.remove(request.user)
+    # else:
+    #     list_auction.fav_lists.add(request.user)
+    return HttpResponseRedirect(reverse("auctions_list", args=(list_auction.id,)))
