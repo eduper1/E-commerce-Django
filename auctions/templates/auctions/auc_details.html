@@ -12,7 +12,7 @@
     </p>
     <br>
     <div>
-        <h2>Comments</h2>
+        <h2>Comments</h2> 
         <p>{% for comment in comments %}
             <ul>
                 <li>{{comment}}</li>
@@ -22,10 +22,35 @@
                 <li> No comments currently </li>
             </ul>
             {% endfor %}
+
+
+
+            <p>{% for watch in watches %}
+                <ul>
+                    <li>{{watch}}</li>
+                </ul>
+                {% empty %}
+                <ul>
+                    <li> No currently </li>
+                </ul>
+                {% endfor %}
         </p>
     </div>
 </div>
 {% if user.is_authenticated %}
+    {% comment %} {{ watch }} {% endcomment %}
+    {% comment %} {% if is_fav %} {% endcomment %}
+    <a href="{% url 'addwatchlist' detail.id %}"> add to your watch list.</a>
+    {% comment %} {% else %} {% endcomment %}
+        {% comment %} <a href="{% url 'addwatchlist' detail.id %}"> REMOVE.</a> {% endcomment %}
+    {% comment %} {% endif %} {% endcomment %}
+    {% comment %} <form action="{% url 'addwatchlist' detail.id %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" name="favor" value="detail.id" >Add to Watchlist</button>
+    </form> {% endcomment %}
+
+
+    <br>
     <form action="{% url 'comment' detail.id%}" method="POST">
         {% csrf_token %}
         {{com_form.as_p}}
