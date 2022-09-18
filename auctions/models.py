@@ -20,9 +20,10 @@ class Auction_listings(models.Model):
     auc_created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="creator", blank=True)
     auc_image = models.ImageField(default='rose.jpg', blank=True)
     auctions = models.ManyToManyField(Category, blank= True, related_name="category")
+    fav_lists = models.ManyToManyField(User, blank=True, related_name="favorite")
     
     def __str__(self):
-        return f"{self.auc_title}"
+        return f"{self.auc_title} "
 
         
 class Bid(models.Model):
@@ -43,3 +44,9 @@ class Comment(models.Model):
     def __str__(self):
         return f"{self.comment}"
         
+# class Watchlist(models.Model):
+#     # first = models.CharField(max_length=64)
+#     # last = models.CharField(max_length=64)
+
+#     def __str__(self):
+#         return f"{self.lists}"
