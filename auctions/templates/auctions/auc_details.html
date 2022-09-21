@@ -1,4 +1,4 @@
-{% extends 'auctions/layout.html' %} {% load static %} %} {% block body %}
+{% extends 'auctions/layout.html' %} {% load static %}  {% block body %}
 <div>
     <h2>{{detail.auc_title}}</h2>
     <img src="{{detail.auc_image.url}}" alt="rose flower" width="100px" height="auto">
@@ -38,16 +38,13 @@
     </div>
 </div>
 {% if user.is_authenticated %}
-    {% comment %} {{ watch }} {% endcomment %}
-    {% comment %} {% if is_fav %} {% endcomment %}
+    
+    {% if is_fav %}
+    <a href="{% url 'addwatchlist' detail.id %}"> REMOVE.</a>
+    {% else %}
     <a href="{% url 'addwatchlist' detail.id %}"> add to your watch list.</a>
-    {% comment %} {% else %} {% endcomment %}
-        {% comment %} <a href="{% url 'addwatchlist' detail.id %}"> REMOVE.</a> {% endcomment %}
-    {% comment %} {% endif %} {% endcomment %}
-    {% comment %} <form action="{% url 'addwatchlist' detail.id %}" method="POST">
-        {% csrf_token %}
-        <button type="submit" name="favor" value="detail.id" >Add to Watchlist</button>
-    </form> {% endcomment %}
+    {% endif %}
+    
 
 
     <br>
