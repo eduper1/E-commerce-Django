@@ -18,13 +18,15 @@ def index(request):
         "listings": listings,
         "categories": Category.objects.all(),
     })
-    
+
+@login_required(login_url='login')    
 def list_page(request, list_id):
-    if request.user.is_authenticated:
-        list_auction = Auction_listings.objects.get(id=list_id)
+    list_auction = Auction_listings.objects.get(id=list_id)
+    if list_auction.fav_lists.filter(id=request.user.id).exists():
+    # if request.user.is_authenticated:
         categories = Category.objects.filter(id = list_id)
         comment_text = forms.Create_comment()
-        # fav = False
+        is_fav = Auction_listings(fav_check=True)
         # if Auction_listings.fav_lists.get(id=request.user.id).exists():
         #     fav = True
         return render(request, "auctions/auc_details.html", {
@@ -33,10 +35,11 @@ def list_page(request, list_id):
             "user": request.user,
             "comments": list_auction.comment.all(),
             "com_form":comment_text,
-            # "is_fav":fav,
+            "is_fav":is_fav,
         })
     else:
-        list_auction = Auction_listings.objects.get(id =list_id)
+        # list_auction = Auction_listings.objects.get(id =list_id)
+        is_fav = Auction_listings(fav_check=False)
         return render(request, "auctions/auc_details.html", {
             "detail":list_auction
         })
@@ -156,10 +159,13 @@ def watch_list(request):
 @login_required(login_url='login')
 def add_watch_list(request, list_id):
     list_auction = Auction_listings.objects.get(id=list_id)
-    request.user.favorite.add(list_auction)
-    request.user.save()
-    # if list_auction.fav_lists.filter(id=request.user.id).exists():
-    #     list_auction.fav_lists.remove(request.user)
-    # else:
-    #     list_auction.fav_lists.add(request.user)
+    # request.user.favorite.add(list_auction)
+    if list_auction.fav_lists.filter(id=request.user.id).exists():
+        # list_auction.fav_lists.remove(request.user)
+        request.user.favorite.remove(list_auction)
+        request.user.save()
+    else:
+        request.user.favorite.add(list_auction)
+        # list_auction.fav_lists.add(request.user)
+        request.user.save()
     return HttpResponseRedirect(reverse("auctions_list", args=(list_auction.id,)))
