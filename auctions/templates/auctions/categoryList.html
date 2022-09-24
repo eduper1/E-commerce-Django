@@ -1,0 +1,7 @@
+{% extends "auctions/layout.html" %} {% load static %}
+{% block body %}
+<h2> Associated List with</h2>
+{% for page in pages %}
+    {{page}}
+{% endfor %}
+{% endblock body %}
