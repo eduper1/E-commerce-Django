@@ -19,13 +19,13 @@ def index(request):
         "categories": Category.objects.all(),
     })
 
-@login_required(login_url='login')    
+# @login_required(login_url='login')    
 def list_page(request, list_id):
     list_auction = Auction_listings.objects.get(id=list_id)
+    categories = Category.objects.filter(id = list_id)
+    comment_text = forms.Create_comment()
     if list_auction.fav_lists.filter(id=request.user.id).exists():
     # if request.user.is_authenticated:
-        categories = Category.objects.filter(id = list_id)
-        comment_text = forms.Create_comment()
         is_fav = Auction_listings(fav_check=True)
         # if Auction_listings.fav_lists.get(id=request.user.id).exists():
         #     fav = True
@@ -41,7 +41,10 @@ def list_page(request, list_id):
         # list_auction = Auction_listings.objects.get(id =list_id)
         is_fav = Auction_listings(fav_check=False)
         return render(request, "auctions/auc_details.html", {
-            "detail":list_auction
+            "detail":list_auction,
+            "cats":categories,
+            "comments": list_auction.comment.all(),
+            "com_form":comment_text,
         })
         # return render(request, "auctions/auc_details.html", {
         #     "detail": list_auction,
@@ -169,3 +172,22 @@ def add_watch_list(request, list_id):
         # list_auction.fav_lists.add(request.user)
         request.user.save()
     return HttpResponseRedirect(reverse("auctions_list", args=(list_auction.id,)))
+
+
+def categories(request):
+    # fav_w_l = Auction_listings.fav_lists.filter(id=request.user.id)
+    return render (request,"auctions/category.html", {
+        # "category":  request.user.favorite.all().values(),
+        "categories":  Category.objects.all(),
+        "msg":"Here is a list of all categories",
+    })
+
+def category_list(request, list_id):
+    get_cato = Auction_listings.objects.get(id=list_id)
+    return render (request,"auctions/category.html", {
+        # "category":  request.user.favorite.all().values(),
+        "pages": Category.objects.filter(category_type=get_cato),
+        # "pages": Category.category_type.filter(id=list_id),
+        # "pages": Category.objects.filter(id=list_id),
+        "msg":"Here is a list of all categories",
+    })
