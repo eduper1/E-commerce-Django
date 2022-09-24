@@ -11,43 +11,27 @@
         <!--{{detail.auctions.category}}--><br> created by: {{detail.auc_created_by}} <br> 
     </p>
     <br>
-    <div>
-        <h2>Comments</h2> 
-        <p>{% for comment in comments %}
-            <ul>
-                <li>{{comment}}</li>
-            </ul>
-            {% empty %}
-            <ul>
-                <li> No comments currently </li>
-            </ul>
-            {% endfor %}
-
-
-
-            <p>{% for watch in watches %}
-                <ul>
-                    <li>{{watch}}</li>
-                </ul>
-                {% empty %}
-                <ul>
-                    <li> No currently </li>
-                </ul>
-                {% endfor %}
-        </p>
-    </div>
 </div>
-{% if user.is_authenticated %}
-    
-    {% if is_fav %}
+<div>
+    <h2>Comments</h2> 
+    <p>{% for comment in comments %}
+        <ul>
+            <li>{{comment}}</li>
+        </ul>
+        {% empty %}
+        <ul>
+            <li> No comments currently </li>
+        </ul>
+        {% endfor %}
+    </p>
+</div>
+{% if is_fav %}
     <a href="{% url 'addwatchlist' detail.id %}"> REMOVE.</a>
-    {% else %}
+{% else %}
     <a href="{% url 'addwatchlist' detail.id %}"> add to your watch list.</a>
-    {% endif %}
-    
-
-
-    <br>
+{% endif %}
+{% if user.is_authenticated %}
+ <br>
     <form action="{% url 'comment' detail.id%}" method="POST">
         {% csrf_token %}
         {{com_form.as_p}}
@@ -58,4 +42,5 @@
     <a href="{% url 'login' %}">Sign in.</a> or  <a href="{% url 'register' %}">Sign up.</a> to comment on this post.
     </p>
 {% endif %}
+
 {% endblock body %}
