@@ -6,36 +6,40 @@
     <p>Price: {{detail.auc_price}}</p>
     <p>Date published: {{detail.auc_date_published}} </p>
     <p>        
-        <dl> 
-            <dt> 
-                Category:
-            </dt>
-            <dd>
-                {% for category in detail.auctions.all %} 
-                <ul><li>
-                    {{category}}
-                </li></ul> 
-                
-                {% endfor %}
-            </dd>
-        </dl>
-
-        <br> created by: {{detail.auc_created_by}} <br> 
+        created by: {{detail.auc_created_by}} <br> 
     </p>
+    <dl> 
+        <dt> 
+            Category:
+        </dt>
+        <dd>
+            {% for category in detail.auctions.all %} 
+            <ul><li>
+                {{category}}
+            </li></ul> 
+            
+            {% endfor %}
+        </dd>
+    </dl>
     <br>
 </div>
 <div>
-    <h2>Comments</h2> 
-    <p>{% for comment in comments %}
-        <ul>
-            <li>{{comment}}</li>
-        </ul>
-        {% empty %}
-        <ul>
-            <li> No comments currently </li>
-        </ul>
-        {% endfor %}
-    </p>
+    <dl> 
+        <dt> 
+            Comments:
+        </dt>
+        <dd>
+            {% for comment in comments %} 
+            <ul><li>
+                {{comment}}
+            </li></ul> 
+            {% empty %}
+            <ul><li>
+                No comments currently
+            </li></ul>
+            {% endfor %}
+        </dd>
+    </dl>
 </div>
 {% if is_fav %}
     <a href="{% url 'addwatchlist' detail.id %}"> REMOVE.</a>
