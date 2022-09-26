@@ -182,11 +182,12 @@ def categories(request):
         "msg":"Here is a list of all categories",
     })
 
-def category_list(request, list_id):
-    get_cato = Auction_listings.objects.get(id=list_id)
-    return render (request,"auctions/category.html", {
+def category_list(request, cats):
+    get_cato = Auction_listings.objects.filter(auctions=cats)
+    return render (request,"auctions/categoryList.html", {
         # "category":  request.user.favorite.all().values(),
-        "pages": Category.objects.filter(category_type=get_cato),
+        "pages": get_cato,
+        # "pages": Category.objects.filter(category_type=get_cato),
         # "pages": Category.category_type.filter(id=list_id),
         # "pages": Category.objects.filter(id=list_id),
         "msg":"Here is a list of all categories",
