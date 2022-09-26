@@ -1,6 +1,7 @@
 {% extends "auctions/layout.html" %} {% load static %}
 {% block body %}
-<h2> Associated List with</h2>
+{% comment %} TODO: Add the category searched in the hearder  {% endcomment %}
+<h2> Associated Auction with ... category</h2>
 {% for page in pages %}
     <a href= {% url 'auctions_list' page.id %}>
         <h2>{{page.auc_title}}</h2>
@@ -19,9 +20,12 @@
             <ul><li>
                 {{category}}
             </li></ul> 
-            
             {% endfor %}
         </dd>
     </dl>
+{% empty %}
+    <p>Auction with category ... not found. </p>
+    {% comment %} TODO: Add the category searched in the hearder  {% endcomment %}
+    <a href={% url 'create_listing' %} > Create an Auction with {{category}} as category. </a>
 {% endfor %}
 {% endblock body %}
