@@ -10,7 +10,19 @@ TODO {% for list in listings %}
     <img src="{{list.auc_image.url}}" alt="rose flower" width="100vw" height="auto">
     <p>Description: {{list.auc_details}}</p>
     <p>Price: {{list.auc_price}}</p>
-    <br> {% for category in list.auctions.all %} {{category}} {% endfor %}
+    <dl> 
+        <dt> 
+            Category:
+        </dt>
+        <dd>
+            {% for category in list.auctions.all %} 
+            <ul><li>
+                {{category}}
+            </li></ul> 
+            
+            {% endfor %}
+        </dd>
+    </dl>
 
 </div>
 
