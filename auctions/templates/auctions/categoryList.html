@@ -2,6 +2,26 @@
 {% block body %}
 <h2> Associated List with</h2>
 {% for page in pages %}
-    {{page}}
+    <a href= {% url 'auctions_list' page.id %}>
+        <h2>{{page.auc_title}}</h2>
+        <aside>{{page.auc_category}}</aside>
+    </a>
+
+    <img src="{{page.auc_image.url}}" alt="rose flower" width="100vw" height="auto">
+    <p>Description: {{page.auc_details}}</p>
+    <p>Price: {{page.auc_price}}</p>
+    <dl> 
+        <dt> 
+            Category:
+        </dt>
+        <dd>
+            {% for category in page.auctions.all %} 
+            <ul><li>
+                {{category}}
+            </li></ul> 
+            
+            {% endfor %}
+        </dd>
+    </dl>
 {% endfor %}
 {% endblock body %}
