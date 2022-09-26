@@ -10,7 +10,7 @@ class Category(models.Model):
     category_type = models.TextField(blank=True)
     
     def __str__(self):
-        return f"Type :{self.category_type}"
+        return f"{self.category_type}"
 
 class Auction_listings(models.Model):
     auc_title = models.CharField(max_length=50)
