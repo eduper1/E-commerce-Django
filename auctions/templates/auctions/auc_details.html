@@ -5,10 +5,22 @@
     <details>{{detail.auc_details}}</details>
     <p>Price: {{detail.auc_price}}</p>
     <p>Date published: {{detail.auc_date_published}} </p>
-    <p>
+    <p>        
+        <dl> 
+            <dt> 
+                Category:
+            </dt>
+            <dd>
+                {% for category in detail.auctions.all %} 
+                <ul><li>
+                    {{category}}
+                </li></ul> 
+                
+                {% endfor %}
+            </dd>
+        </dl>
 
-        {% for cato in detail.auctions.all %} {{cato}} {% endfor %}
-        <!--{{detail.auctions.category}}--><br> created by: {{detail.auc_created_by}} <br> 
+        <br> created by: {{detail.auc_created_by}} <br> 
     </p>
     <br>
 </div>
