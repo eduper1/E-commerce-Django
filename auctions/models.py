@@ -31,10 +31,11 @@ class Bid(models.Model):
     bid_by = models.ForeignKey(User, related_name="user", on_delete=models.CASCADE)
     bid_on_auction = models.ForeignKey(Auction_listings, related_name="listings", on_delete=models.CASCADE)
     # think about bid amount
-    bid_amount = models.ForeignKey(Auction_listings, on_delete=models.CASCADE, related_name="bid")
+    place_bid = models.IntegerField(blank=True, default=0)
+    bid_count = models.IntegerField(default=0)
     
     def __str__(self):
-        return f"{self.bid_by} {self.bid_amount} {self.bid_on_auction}"
+        return f"{self.bid_by} {self.place_bid} {self.bid_on_auction} {self.bid_count} "
     
 class Comment(models.Model):
     comment_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="commentor", blank=False)
