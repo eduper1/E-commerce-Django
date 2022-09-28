@@ -12,3 +12,9 @@ class Create_comment(forms.ModelForm):
     class Meta:
         model = models.Comment
         fields = ['comment']
+
+
+class Place_bid(forms.ModelForm):
+    class Meta:
+        model = models.Bid
+        fields = ['place_bid']
