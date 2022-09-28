@@ -9,7 +9,7 @@ class Comment_admin(admin.ModelAdmin):
     list_display = ("id", "comment_on", "comment")   
                                                                                                                                                                                                                                                                     
 class Bid_admin(admin.ModelAdmin):
-    list_display = ("id", "bid_by", "bid_on_auction", "bid_amount")   
+    list_display = ("id", "bid_by", "bid_on_auction", "place_bid", "bid_count")   
     
 
 class Category_admin(admin.ModelAdmin):
