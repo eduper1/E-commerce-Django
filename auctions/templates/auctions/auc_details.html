@@ -8,6 +8,21 @@
     <p>        
         created by: {{detail.auc_created_by}} <br> 
     </p>
+
+    <dl> 
+        <dt> 
+            Bids:
+        </dt>
+        <dd>
+            {% for B in detail.listings.all %} 
+            <ul><li>
+                {{B}}
+            </li></ul> 
+            
+            {% endfor %}
+        </dd>
+    </dl> 
+
     <dl> 
         <dt> 
             Category:
@@ -23,6 +38,16 @@
     </dl>
     <br>
 </div>
+
+{% if user.is_authenticated %}
+ <br>
+    <form action="{% url 'placeBid' detail.id%}" method="POST">
+        {% csrf_token %}
+        {{bid.as_p}}
+        <button type=" submit ">Place Bid</button>
+    </form>
+{% endif %}
+<br>
 <div>
     <dl> 
         <dt> 
@@ -55,7 +80,7 @@
     </form>
 {% else %}
     <p>
-    <a href="{% url 'login' %}">Sign in.</a> or  <a href="{% url 'register' %}">Sign up.</a> to comment on this post.
+    <a href="{% url 'login' %}">Sign in.</a> or  <a href="{% url 'register' %}">Sign up.</a> to comment/bid on this post.
     </p>
 {% endif %}
 
