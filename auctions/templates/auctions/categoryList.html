@@ -1,7 +1,7 @@
 {% extends "auctions/layout.html" %} {% load static %}
 {% block body %}
 {% comment %} TODO: Add the category searched in the hearder  {% endcomment %}
-<h2> Associated Auction with ... category</h2>
+<h2> Associated Auction with {{title}} category</h2>
 {% for page in pages %}
     <a href= {% url 'auctions_list' page.id %}>
         <h2>{{page.auc_title}}</h2>
