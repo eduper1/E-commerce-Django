@@ -38,6 +38,7 @@ def list_page(request, list_id):
             "com_form":comment_text,
             "bid": bid_form,
             "is_fav":is_fav,
+            # "rial": list_auction.listings.all(),
         })
     else:
         # list_auction = Auction_listings.objects.get(id =list_id)
@@ -48,6 +49,9 @@ def list_page(request, list_id):
             "comments": list_auction.comment.all(),
             "com_form":comment_text,
             "bid": bid_form,
+            "rial": list(Bid.objects.values_list('place_bid', flat=True)).pop(
+
+            )
         })
         # return render(request, "auctions/auc_details.html", {
         #     "detail": list_auction,
@@ -202,7 +206,11 @@ def bid(request,list_id):
         list_auction = Auction_listings.objects.get(pk=list_id)
         if request.method == 'POST':
             bid_digit = forms.Place_bid(request.POST)
-            if bid_digit.is_valid():                                                                                                                                         
+            bds = list(Bid.objects.values_list('place_bid', flat=True))
+            bds.sort()
+            # bds = Bid.objects.get(place_bid=Bid.place_bid)
+        if bid_digit.is_valid():
+            if int(bid_digit['place_bid'].value()) > bds.pop():
                 bid_dt = bid_digit.save(commit=False)
                 # bid_dt.comment = comment_text["comment"]
                 bid_dt.bid_on_auction = list_auction
@@ -226,5 +234,5 @@ def bid(request,list_id):
             "user": request.user,
             "comments": list_auction.comment.all(),
             # "com_form":comment_text(),
-            "bid": bid_digit(),
+            "bid": forms.Place_bid(request.POST ),
         })
