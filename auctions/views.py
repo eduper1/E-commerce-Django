@@ -4,6 +4,7 @@ from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.db.models import F
 from django.urls import reverse
 from datetime import datetime
 from . import forms
@@ -49,9 +50,8 @@ def list_page(request, list_id):
             "comments": list_auction.comment.all(),
             "com_form":comment_text,
             "bid": bid_form,
-            "rial": list(Bid.objects.values_list('place_bid', flat=True)).pop(
-
-            )
+            "rial": Bid.objects.filter(bid_on_auction=list_auction).count()
+            # "rial": list(Bid.objects.values_list('place_bid', flat=True)).pop()
         })
         # return render(request, "auctions/auc_details.html", {
         #     "detail": list_auction,
@@ -209,15 +209,19 @@ def bid(request,list_id):
             bds = list(Bid.objects.values_list('place_bid', flat=True))
             bds.sort()
             # bds = Bid.objects.get(place_bid=Bid.place_bid)
-        if bid_digit.is_valid():
-            if int(bid_digit['place_bid'].value()) > bds.pop():
-                bid_dt = bid_digit.save(commit=False)
-                # bid_dt.comment = comment_text["comment"]
-                bid_dt.bid_on_auction = list_auction
-                bid_dt.bid_by = request.user
-                bid_dt.bid_count += 1
-                bid_dt.save()
-                # print(com_t)
+            if bid_digit.is_valid():
+                if int(bid_digit['place_bid'].value()) > bds.pop():
+                    bid_dt = bid_digit.save(commit=False)
+                    # bid_dt.comment = comment_text["comment"]
+                    bid_dt.bid_on_auction = list_auction
+                    bid_dt.bid_by = request.user
+                    # bid_dt.bid_count = list_auction.listings.bid_count + 1
+                    # bid_dt = Bid.objects.filter(pk=list_id).update(bid_count=F('bid_count') + 1)
+                    # counter.count = F("count") + 1
+                    # counter.save(update_fields=["count"])
+                    # Bid.objects.filter().update(bid_count=+1)
+                    bid_dt.save()
+                    # print(com_t)
             
                 return HttpResponseRedirect(reverse("auctions_list", args=(list_auction.id,)))
             else:
