@@ -39,18 +39,18 @@ def list_page(request, list_id):
             "com_form":comment_text,
             "bid": bid_form,
             "is_fav":is_fav,
-            # "rial": list_auction.listings.all(),
+            "rial": len(Bid.objects.filter(bid_on_auction=list_auction)),
         })
     else:
         # list_auction = Auction_listings.objects.get(id =list_id)
-        is_fav = Auction_listings(fav_check=False)
+        # is_fav = Auction_listings(fav_check=False)
         return render(request, "auctions/auc_details.html", {
             "detail":list_auction,
             "cats":categories,
             "comments": list_auction.comment.all(),
             "com_form":comment_text,
             "bid": bid_form,
-            "rial": Bid.objects.filter(bid_on_auction=list_auction).count()
+            "rial": len(Bid.objects.filter(bid_on_auction=list_auction))
             # "rial": list(Bid.objects.values_list('place_bid', flat=True)).pop()
         })
         # return render(request, "auctions/auc_details.html", {
@@ -210,7 +210,7 @@ def bid(request,list_id):
             bds.sort()
             # bds = Bid.objects.get(place_bid=Bid.place_bid)
             if bid_digit.is_valid():
-                if int(bid_digit['place_bid'].value()) > bds.pop():
+                if (int(bid_digit['place_bid'].value()) > bds.pop()) and (int(bid_digit['place_bid'].value()) > list_auction.auc_price):
                     bid_dt = bid_digit.save(commit=False)
                     # bid_dt.comment = comment_text["comment"]
                     bid_dt.bid_on_auction = list_auction
@@ -222,8 +222,7 @@ def bid(request,list_id):
                     # Bid.objects.filter().update(bid_count=+1)
                     bid_dt.save()
                     # print(com_t)
-            
-                return HttpResponseRedirect(reverse("auctions_list", args=(list_auction.id,)))
+                    return HttpResponseRedirect(reverse("auctions_list", args=(list_auction.id,)))
             else:
                 return render(request, "auctions/auc_details.html", {
                     "detail": list_auction,
@@ -238,5 +237,5 @@ def bid(request,list_id):
             "user": request.user,
             "comments": list_auction.comment.all(),
             # "com_form":comment_text(),
-            "bid": forms.Place_bid(request.POST ),
+            "bid": forms.Place_bid(),
         })
