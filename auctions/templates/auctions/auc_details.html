@@ -9,7 +9,7 @@
         created by: {{detail.auc_created_by}} <br> 
     </p>
 
-    <dl> 
+    {% comment %} <dl> 
         <dt> 
             Bids:
         </dt>
@@ -21,9 +21,12 @@
             
             {% endfor %}
         </dd>
-    </dl> 
+    </dl>  {% endcomment %}
 {% comment %} {{detail.listings.all }} {% endcomment %}
-{{rial}}
+{{detail.listings.last}}
+<P>
+    {{rial}} bid(s) so far.
+</p>
     <dl> 
         <dt> 
             Category:
