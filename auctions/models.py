@@ -20,6 +20,8 @@ class Auction_listings(models.Model):
     auc_created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="creator", blank=True)
     auc_image = models.ImageField(default='rose.jpg', blank=True)
     auctions = models.ManyToManyField(Category, blank= True, related_name="category")
+    winner = models.CharField(max_length=250)
+    active_auction = models.BooleanField(default=True)
     fav_lists = models.ManyToManyField(User, blank=True, related_name="favorite")
     fav_check = models.BooleanField(default=False)
     
