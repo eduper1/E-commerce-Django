@@ -8,7 +8,9 @@
     <p>        
         created by: {{detail.auc_created_by}} <br> 
     </p>
-
+    <p> 
+        {% if request.user == details. auc_created_by %}
+        <a href="{% url 'CloseBid' detail.id %}"> Close this bid </a></p>
     {% comment %} <dl> 
         <dt> 
             Bids:
