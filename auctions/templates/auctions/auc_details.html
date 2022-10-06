@@ -8,9 +8,25 @@
     <p>        
         created by: {{detail.auc_created_by}} <br> 
     </p>
-    <p> 
-        {% if request.user == details. auc_created_by %}
-        <a href="{% url 'CloseBid' detail.id %}"> Close this bid </a></p>
+    <P>
+        {{rial}} bid(s) so far. <br>
+        {{detail.listings.last}}
+    </p>
+    <p> {% if user.is_authenticated %}
+            {% if user == detail.auc_created_by  and  detail.active_auction == True %}
+                <a href="{% url 'CloseBid' detail.id %}"> Close this bid </a>
+            {% else %}
+                {% if detail.winner != None %}
+                    <p> The bid is closed and the bid winner is {{detail.winner}} </p>
+                {% endif %}
+
+            {% endif %}
+        {% else %}
+            {% if detail.winner == 0 %}
+                <p> huisdu </p>
+            {% endif %}
+        {% endif %}
+    </p>
     {% comment %} <dl> 
         <dt> 
             Bids:
@@ -25,10 +41,6 @@
         </dd>
     </dl>  {% endcomment %}
 {% comment %} {{detail.listings.all }} {% endcomment %}
-{{detail.listings.last}}
-<P>
-    {{rial}} bid(s) so far.
-</p>
     <dl> 
         <dt> 
             Category:
@@ -45,7 +57,7 @@
     <br>
 </div>
 
-{% if user.is_authenticated %}
+{% if user.is_authenticated and detail.active_auction == True %}
  <br>
     <form action="{% url 'placeBid' detail.id%}" method="POST">
         {% csrf_token %}
