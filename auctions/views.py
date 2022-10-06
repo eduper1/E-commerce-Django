@@ -245,8 +245,9 @@ def bid(request,list_id):
 def close_bid(request,list_id):
     list_auction = Auction_listings.objects.get(pk=list_id)
     if request.user == list_auction.auc_created_by:
-        list_auction.winner = list_auction.listings.bid_by
+        list_auction.winner = str(Bid.objects.filter(bid_on_auction=list_auction).last().bid_by)
         list_auction.active_auction = False
         list_auction.save()
+        return HttpResponseRedirect(reverse("auctions_list", args=(list_auction.id,)))
     else:
         return HttpResponseRedirect(reverse("auctions_list", args=(list_auction.id,)))
