@@ -20,7 +20,7 @@ class Auction_listings(models.Model):
     auc_created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="creator", blank=True)
     auc_image = models.ImageField(default='rose.jpg', blank=True)
     auctions = models.ManyToManyField(Category, blank= True, related_name="category")
-    winner = models.CharField(max_length=250)
+    winner = models.CharField(max_length=250, blank=True)
     active_auction = models.BooleanField(default=True)
     fav_lists = models.ManyToManyField(User, blank=True, related_name="favorite")
     fav_check = models.BooleanField(default=False)
@@ -34,10 +34,10 @@ class Bid(models.Model):
     bid_on_auction = models.ForeignKey(Auction_listings, related_name="listings", on_delete=models.CASCADE)
     # think about bid amount
     place_bid = models.IntegerField(blank=True, default=0)
-    bid_count = models.IntegerField(default=0)
+    # bid_count = models.IntegerField(default=0)
     
     def __str__(self):
-        return f"{self.bid_by} {self.place_bid} {self.bid_on_auction} {self.bid_count} "
+        return f"{self.bid_by} {self.place_bid} {self.bid_on_auction}"
     
 class Comment(models.Model):
     comment_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="commentor", blank=False)
