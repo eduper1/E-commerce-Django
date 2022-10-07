@@ -59,33 +59,32 @@ def list_page(request, list_id):
 
         
 def comment(request,list_id):
-    if request.user.is_authenticated:
-        list_auction = Auction_listings.objects.get(pk=list_id)
-        if request.method == 'POST':
-            comment_text = forms.Create_comment(request.POST)
-            if comment_text.is_valid():                                                                                                                                         
-                com_t = comment_text.save(commit=False)
-                # com_t.comment = comment_text["comment"]
-                com_t.comment_on = list_auction
-                com_t.comment_by = request.user
-                com_t.save()
-                # print(com_t)
-            
-                return HttpResponseRedirect(reverse("auctions_list", args=(list_auction.id,)))
-            else:
-                return render(request, "auctions/auc_details.html", {
-                    "detail": list_auction,
-                    # "cats":categories,
-                    "user": request.user,
-                    "comments": list_auction.comment.all(),
-                    "com_form":comment_text,
-                })
-        return render (request,"auctions/auc_details.html", {
-            "detail": list_auction,
-            "user": request.user,
-            "comments": list_auction.comment.all(),
-            "com_form":comment_text()
-        })
+    list_auction = Auction_listings.objects.get(pk=list_id)
+    if request.method == 'POST':
+        comment_text = forms.Create_comment(request.POST)
+        if comment_text.is_valid():                                                                                                                                         
+            com_t = comment_text.save(commit=False)
+            # com_t.comment = comment_text["comment"]
+            com_t.comment_on = list_auction
+            com_t.comment_by = request.user
+            com_t.save()
+            # print(com_t)
+        
+            return HttpResponseRedirect(reverse("auctions_list", args=(list_auction.id,)))
+        else:
+            return render(request, "auctions/auc_details.html", {
+                "detail": list_auction,
+                # "cats":categories,
+                "user": request.user,
+                "comments": list_auction.comment.all(),
+                "com_form":comment_text,
+            })
+    return render (request,"auctions/auc_details.html", {
+        "detail": list_auction,
+        "user": request.user,
+        "comments": list_auction.comment.all(),
+        "com_form":comment_text()
+    })
             
 @login_required(login_url='login')
 def create_listing(request):
@@ -94,7 +93,7 @@ def create_listing(request):
     if request.method == "POST":
         form = form
         if form.is_valid():
-            text = form.data["auc_created_by"]
+            # text = form.data["auc_created_by"]
             form.save()
         else:
             return render(request, "auctions/newListing.html",{
@@ -208,30 +207,33 @@ def bid(request,list_id):
         bid_digit = forms.Place_bid(request.POST)
         bds = list(Bid.objects.values_list('place_bid', flat=True))
         bds.sort()
-        # bds = Bid.objects.get(place_bid=Bid.place_bid)
         if bid_digit.is_valid():
-            if (int(bid_digit['place_bid'].value()) > bds.pop()) and (int(bid_digit['place_bid'].value()) > list_auction.auc_price):
+            if (int(bid_digit['place_bid'].value()) > (bds.pop() and 0)) and (int(bid_digit['place_bid'].value()) > list_auction.auc_price):
                 bid_dt = bid_digit.save(commit=False)
-                # bid_dt.comment = comment_text["comment"]
                 bid_dt.bid_on_auction = list_auction
                 bid_dt.bid_by = request.user
-                # bid_dt.bid_count = list_auction.listings.bid_count + 1
-                # bid_dt = Bid.objects.filter(pk=list_id).update(bid_count=F('bid_count') + 1)
-                # counter.count = F("count") + 1
-                # counter.save(update_fields=["count"])
-                # Bid.objects.filter().update(bid_count=+1)
                 bid_dt.save()
-                # print(com_t)
                 return HttpResponseRedirect(reverse("auctions_list", args=(list_auction.id,)))
             else:
                 return render(request, "auctions/auc_details.html", {
                     "detail": list_auction,
+                    "error": "number must be greater than ....",
                     # "cats":categories,
                     "user": request.user,
                     "comments": list_auction.comment.all(),
                     # "com_form":comment_text,
                     "bid": bid_digit,
+                    "rial": len(Bid.objects.filter(bid_on_auction=list_auction))
                 })
+        else:
+            return render(request, "auctions/auc_details.html", {
+                "detail": list_auction,
+                # "cats":categories,
+                "user": request.user,
+                "comments": list_auction.comment.all(),
+                # "com_form":comment_text,
+                "bid": bid_digit,
+            })
     else:
         return render (request,"auctions/auc_details.html", {
             "detail": list_auction,
