@@ -7,8 +7,8 @@
     Watchlist
 </h2>
 
-{% for list in lists %}
 <div>
+    {% for list in lists %}
             <a href="{% url 'auctions_list' list.id %}">
                 <h2>{{list.auc_title}}</h2>
                 <aside>{{list.auc_category}}</aside>
@@ -16,7 +16,19 @@
             <img src="{{list.auc_image.url}}" alt="rose flower" width="100vw" height="auto">
             <p>Description: {{list.auc_details}}</p>
             <p>Price: {{list.auc_price}}</p>
-        <br> {% for category in list.auctions.all %} {{category}} {% endfor %} 
+        <dl> 
+            <dt> 
+                Category:
+            </dt>
+            <dd>
+                {% for category in list.auctions.all %} 
+                <ul><li>
+                    {{category}}
+                </li></ul> 
+                {% endfor %}
+            </dd>
+        </dl>
 
+        {% endfor %}
     </div>
-{% endfor %}  {% endblock %}
+{% endblock %}
