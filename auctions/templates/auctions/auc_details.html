@@ -10,7 +10,9 @@
     </p>
     <P>
         {{rial}} bid(s) so far. <br>
-        {{detail.listings.last}}
+        {% if details.listings.last != None %}
+            {{detail.listings.last}}
+        {% endif %}
     </p>
     <p> {% if user.is_authenticated %}
             {% if user == detail.auc_created_by  and  detail.active_auction == True %}
@@ -66,6 +68,7 @@
     </form>
 {% endif %}
 <br>
+{{error}}
 <div>
     <dl> 
         <dt> 
