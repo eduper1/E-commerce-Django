@@ -161,7 +161,7 @@ def register(request):
 def watch_list(request):
     # fav_w_l = Auction_listings.fav_lists.filter(id=request.user.id)
     return render (request,"auctions/watchlist.html", {
-        "lists":  request.user.favorite.all().values(),
+        "lists":  request.user.favorite.all(),
         # "fav":fav_w_l,
     })
 
