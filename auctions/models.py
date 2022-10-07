@@ -37,7 +37,7 @@ class Bid(models.Model):
     # bid_count = models.IntegerField(default=0)
     
     def __str__(self):
-        return f"{self.bid_by} {self.place_bid} {self.bid_on_auction}"
+        return f"{self.bid_by} ${self.place_bid} {self.bid_on_auction}"
     
 class Comment(models.Model):
     comment_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="commentor", blank=False)
