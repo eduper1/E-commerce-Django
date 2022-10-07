@@ -10,15 +10,17 @@
     </p>
     <P>
         {{rial}} bid(s) so far. <br>
-        {% if details.listings.last != None %}
+        {% if details.listings.last != '' %}
+        <p>Last Bid placed:
             {{detail.listings.last}}
+    </p>
         {% endif %}
     </p>
     <p> {% if user.is_authenticated %}
             {% if user == detail.auc_created_by  and  detail.active_auction == True %}
                 <a href="{% url 'CloseBid' detail.id %}"> Close this bid </a>
             {% else %}
-                {% if detail.winner != None %}
+                {% if detail.winner != '' %}
                     <p> The bid is closed and the bid winner is {{detail.winner}} </p>
                 {% endif %}
 
