@@ -194,7 +194,7 @@ def category_list(request, cats):
     get_cato = Auction_listings.objects.filter(auctions=cats)
     return render (request,"auctions/categoryList.html", {
         # "category":  request.user.favorite.all().values(),
-        "title":cats,
+        "title":Category.objects.get(id = cats),
         "pages": get_cato,
         # "pages": Category.objects.filter(category_type=get_cato),
         # "pages": Category.category_type.filter(id=list_id),
