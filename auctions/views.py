@@ -27,10 +27,10 @@ def list_page(request, list_id):
     comment_text = forms.Create_comment()
     bid_form = forms.Place_bid()
     if list_auction.fav_lists.filter(id=request.user.id).exists():
+        is_fav = True
     # if request.user.is_authenticated:
-        is_fav = Auction_listings(fav_check=True)
+        # list_auction.fav_check = True
         # if Auction_listings.fav_lists.get(id=request.user.id).exists():
-        #     fav = True
         return render(request, "auctions/auc_details.html", {
             "detail": list_auction,
             "cats":categories,
@@ -174,10 +174,14 @@ def add_watch_list(request, list_id):
     # request.user.favorite.add(list_auction)
     if list_auction.fav_lists.filter(id=request.user.id).exists():
         # list_auction.fav_lists.remove(request.user)
+        list_auction.fav_check = False 
+        list_auction.save()
         request.user.favorite.remove(list_auction)
         request.user.save()
     else:
         request.user.favorite.add(list_auction)
+        list_auction.fav_check = True
+        list_auction.save()
         # list_auction.fav_lists.add(request.user)
         request.user.save()
     return HttpResponseRedirect(reverse("auctions_list", args=(list_auction.id,)))
