@@ -35,9 +35,7 @@ class Auction_listings(models.Model):
 class Bid(models.Model):
     bid_by = models.ForeignKey(User, related_name="user", on_delete=models.CASCADE)
     bid_on_auction = models.ForeignKey(Auction_listings, related_name="listings", on_delete=models.CASCADE)
-    # think about bid amount
-    place_bid = models.IntegerField(blank=True, default=0)
-    # bid_count = models.IntegerField(default=0)
+    place_bid = models.IntegerField(blank=True)
     
     def __str__(self):
         return f"{self.bid_by} ${self.place_bid} {self.bid_on_auction}"
