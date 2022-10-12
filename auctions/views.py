@@ -39,6 +39,7 @@ def list_page(request, list_id):
             "com_form":comment_text,
             "bid": bid_form,
             "is_fav":is_fav,
+            # "rial": list(Bid.objects.values_list('place_bid', flat=True))
             "rial": len(Bid.objects.filter(bid_on_auction=list_auction)),
         })
     else:
@@ -50,8 +51,8 @@ def list_page(request, list_id):
             "comments": list_auction.comment.all(),
             "com_form":comment_text,
             "bid": bid_form,
-            "rial": len(Bid.objects.filter(bid_on_auction=list_auction))
-            # "rial": list(Bid.objects.values_list('place_bid', flat=True)).pop()
+            "rial": len(Bid.objects.filter(bid_on_auction=list_auction)),
+            # "rial": list(Bid.objects.values_list('place_bid', flat=True)).sort(reverse=True)
         })
         # return render(request, "auctions/auc_details.html", {
         #     "detail": list_auction,
@@ -208,25 +209,63 @@ def bid(request,list_id):
     if request.method == 'POST':
         bid_digit = forms.Place_bid(request.POST)
         bds = list(Bid.objects.values_list('place_bid', flat=True))
-        bds.sort()
+        bds.sort(reverse=True)
         if bid_digit.is_valid():
-            if (int(bid_digit['place_bid'].value()) > (bds.pop() and 0)) and (int(bid_digit['place_bid'].value()) > list_auction.auc_price):
-                bid_dt = bid_digit.save(commit=False)
-                bid_dt.bid_on_auction = list_auction
-                bid_dt.bid_by = request.user
-                bid_dt.save()
-                return HttpResponseRedirect(reverse("auctions_list", args=(list_auction.id,)))
+            # get_object_or_404(Bid, id=list_id).place_bid
+            # if (int(bid_digit['place_bid'].value()) > 0) and (int(bid_digit['place_bid'].value()) > bds.pop()) and (int(bid_digit['place_bid'].value()) > list_auction.auc_price):
+            if Bid.objects.filter(bid_on_auction=list_auction).exists():
+                last_bid = float(Bid.objects.filter(bid_on_auction=list_auction).last().place_bid)
+                if int(bid_digit['place_bid'].value()) > last_bid and list_auction.auc_price:
+                    bid_dt = bid_digit.save(commit=False)
+                    bid_dt.bid_on_auction = list_auction
+                    bid_dt.bid_by = request.user
+                    bid_dt.save()
+                
+                    return HttpResponseRedirect(reverse("auctions_list", args=(list_auction.id,)))
+                else:
+                    return render(request, "auctions/auc_details.html", {
+                        "detail": list_auction,
+                        "error": f"number must be greater than {list_auction.auc_price} and { last_bid } ",
+                        # "cats":categories,
+                        "user": request.user,
+                        "comments": list_auction.comment.all(),
+                        # "com_form":comment_text,
+                        "bid": bid_digit,
+                        "rial": len(Bid.objects.filter(bid_on_auction=list_auction))
+                    })
+            
+            # elif Bid.objects.filter(bid_on_auction=list_auction).exists() == False:
             else:
-                return render(request, "auctions/auc_details.html", {
-                    "detail": list_auction,
-                    "error": "number must be greater than ....",
-                    # "cats":categories,
-                    "user": request.user,
-                    "comments": list_auction.comment.all(),
-                    # "com_form":comment_text,
-                    "bid": bid_digit,
-                    "rial": len(Bid.objects.filter(bid_on_auction=list_auction))
-                })
+                if int(bid_digit['place_bid'].value()) > list_auction.auc_price:
+                    bid_dt = bid_digit.save(commit=False)
+                    bid_dt.bid_on_auction = list_auction
+                    bid_dt.bid_by = request.user
+                    bid_dt.save()
+                
+                    return HttpResponseRedirect(reverse("auctions_list", args=(list_auction.id,)))
+                else:
+                    return render(request, "auctions/auc_details.html", {
+                        "detail": list_auction,
+                        "error": f"number must be greater than {list_auction.auc_price} ",
+                        # "cats":categories,
+                        "user": request.user,
+                        "comments": list_auction.comment.all(),
+                        # "com_form":comment_text,
+                        "bid": bid_digit,
+                        "rial": len(Bid.objects.filter(bid_on_auction=list_auction))
+                    })
+            
+            # else:
+            #     return render(request, "auctions/auc_details.html", {
+            #         "detail": list_auction,
+            #         "error": f"number must be greater than { list_auction.auc_price } ",
+            #         # "cats":categories,
+            #         "user": request.user,
+            #         "comments": list_auction.comment.all(),
+            #         # "com_form":comment_text,
+            #         "bid": bid_digit,
+            #         "rial": len(Bid.objects.filter(bid_on_auction=list_auction))
+            #     })
         else:
             return render(request, "auctions/auc_details.html", {
                 "detail": list_auction,
