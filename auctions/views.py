@@ -210,6 +210,7 @@ def category_list(request, cats):
 @login_required(login_url='login')
 def bid(request,list_id):
     list_auction = Auction_listings.objects.get(pk=list_id)
+    comment_text = forms.Create_comment()
     if request.method == 'POST':
         bid_digit = forms.Place_bid(request.POST)
         bds = list(Bid.objects.values_list('place_bid', flat=True))
@@ -233,7 +234,7 @@ def bid(request,list_id):
                         # "cats":categories,
                         "user": request.user,
                         "comments": list_auction.comment.all(),
-                        # "com_form":comment_text,
+                        "com_form":comment_text,
                         "bid": bid_digit,
                         "rial": len(Bid.objects.filter(bid_on_auction=list_auction))
                     })
@@ -254,7 +255,7 @@ def bid(request,list_id):
                         # "cats":categories,
                         "user": request.user,
                         "comments": list_auction.comment.all(),
-                        # "com_form":comment_text,
+                        "com_form":comment_text,
                         "bid": bid_digit,
                         "rial": len(Bid.objects.filter(bid_on_auction=list_auction))
                     })
