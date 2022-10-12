@@ -89,7 +89,7 @@
         </dd>
     </dl>
 </div>
-{% if is_fav %}
+{% if detail.fav_check %}
     <a href="{% url 'addwatchlist' detail.id %}"> REMOVE.</a>
 {% else %}
     <a href="{% url 'addwatchlist' detail.id %}"> add to your watch list.</a>
