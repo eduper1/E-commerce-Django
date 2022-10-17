@@ -27,7 +27,7 @@ def list_page(request, list_id):
     comment_text = forms.Create_comment()
     bid_form = forms.Place_bid()
     if list_auction.fav_lists.filter(id=request.user.id).exists():
-        # is_fav = True
+        is_fav = True
     # if request.user.is_authenticated:
         # list_auction.fav_check = True
         # if Auction_listings.fav_lists.get(id=request.user.id).exists():
@@ -38,7 +38,7 @@ def list_page(request, list_id):
             "comments": list_auction.comment.all(),
             "com_form":comment_text,
             "bid": bid_form,
-            # "is_fav":is_fav,
+            "is_fav":is_fav,
             # "rial": list(Bid.objects.values_list('place_bid', flat=True))
             "rial": len(Bid.objects.filter(bid_on_auction=list_auction)),
         })
