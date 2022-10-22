@@ -3,7 +3,7 @@ from .models import *
 
 # Register your models here.
 class Auction_listings_admin(admin.ModelAdmin):
-    list_display = ("id", "auc_title", "auc_details", "auc_price", "auc_created_by", "auc_category", "fav_lists")    
+    list_display = ("id", "auc_title", "auc_details", "auc_price", "auc_created_by", "fav_lists")    
     
 class Comment_admin(admin.ModelAdmin):
     list_display = ("id", "comment_on", "comment")   
