@@ -27,6 +27,9 @@ class Create_comment(forms.ModelForm):
     class Meta:
         model = models.Comment
         fields = ['comment']
+        widgets = {
+            'comment': forms.Textarea(attrs={'cols': 50, 'rows': 5}),
+        }
 
 
 class Place_bid(forms.ModelForm):
