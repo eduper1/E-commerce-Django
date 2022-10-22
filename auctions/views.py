@@ -94,10 +94,11 @@ def create_listing(request):
     if request.method == "POST":
         form = form
         if form.is_valid():
-            form = form.save(commit=False)
-            form.auc_created_by = request.user
+            form_list = form.save(commit=False)
+            form_list.auc_created_by = request.user
             # text = form.data["auc_created_by"]
-            form.save()
+            form_list.save()
+            form.save_m2m()
         else:
             return render(request, "auctions/newListing.html",{
                 "form":form,
