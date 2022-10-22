@@ -18,10 +18,10 @@ class Category(models.Model):
 class Auction_listings(models.Model):
     auc_title = models.CharField(max_length=50)
     auc_details = models.CharField(max_length=250)
-    auc_price = models.IntegerField()
+    auc_price = models.PositiveIntegerField(blank=False)
     auc_date_published = models.DateTimeField(auto_now_add=True)
     auc_created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="creator", blank=True)
-    auc_image = models.ImageField(default='rose.jpg', blank=True)
+    auc_image = models.ImageField(default='rose.jpg', blank=False)
     auctions = models.ManyToManyField(Category, blank= True, related_name="category")
     winner = models.CharField(max_length=250, blank=True)
     active_auction = models.BooleanField(default=True)
@@ -35,7 +35,7 @@ class Auction_listings(models.Model):
 class Bid(models.Model):
     bid_by = models.ForeignKey(User, related_name="user", on_delete=models.CASCADE)
     bid_on_auction = models.ForeignKey(Auction_listings, related_name="listings", on_delete=models.CASCADE)
-    place_bid = models.IntegerField(blank=True)
+    place_bid = models.PositiveIntegerField(blank=True)
     
     def __str__(self):
         return f"{self.bid_by} ${self.place_bid} {self.bid_on_auction}"
