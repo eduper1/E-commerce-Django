@@ -20,6 +20,7 @@ class Create_listing(forms.ModelForm):
             'auc_title': ('Item name like: Watch, Book, etc.'),
             'auc_details':("Describe the Item's feture"),
             'auc_price':('Starting Bid'),
+            'auctions':('Hold down “Control”, or “Command” on a Mac, to select more than one. ')
         }
         
         
