@@ -12,8 +12,8 @@ class Category(models.Model):
     def __str__(self):
         return f"{self.category_type}"
 
-    def get_absolute_url(self):
-        return reverse("categoriesList", args=[str(self.id)])
+    # def get_absolute_url(self):
+    #     return reverse("categoriesList", args=[str(self.id)])
 
 class Auction_listings(models.Model):
     auc_title = models.CharField(max_length=50)
