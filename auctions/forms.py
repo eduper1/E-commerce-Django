@@ -19,7 +19,7 @@ class Create_listing(forms.ModelForm):
         help_texts = {
             'auc_title': ('Item name like: Watch, Book, etc.'),
             'auc_details':("Describe the Item's feture"),
-            'auc_price':('Staring Bid'),
+            'auc_price':('Starting Bid'),
         }
         
         
