@@ -2,25 +2,25 @@ from django import forms
 from django.forms import fields
 from . import models
 
-class Create_listing(forms.ModelForm):
+class Create_item(forms.ModelForm):
     class Meta:
-        model = models.Auction_listings
-        fields = ['auc_title', 'auc_details', 'auc_price', 'auctions', 'auc_image']
+        model = models.Auction
+        fields = ['item_name', 'item_description', 'starting_price', 'item_category', 'item_image']
         widgets = {
-            'auc_details': forms.Textarea(attrs={'cols': 50, 'rows': 5}),
+            'item_description': forms.Textarea(attrs={'cols': 50, 'rows': 5}),
         }
         labels = {
-            'auc_title': ('Item'),
-            'auc_details':('Description'),
-            'auc_price':('Price'),
-            'auctions':('Category'),
-            'auc_image':('Choose a Picture of the Item')
+            'item_name': ('Item'),
+            'item_description':('Description'),
+            'starting_price':('Price'),
+            'item_category':('Category'),
+            'item_image':('Choose a Picture of the Item')
         }
         help_texts = {
-            'auc_title': ('Item name like: Watch, Book, etc.'),
-            'auc_details':("Describe the Item's feture"),
-            'auc_price':('Starting Bid'),
-            'auctions':('Hold down “Control”, or “Command” on a Mac, to select more than one. ')
+            'item_name': ('Item name like: Watch, Book, etc.'),
+            'item_description':("Describe the Item's feture"),
+            'starting_price':('Starting Bid'),
+            'item_category':('Hold down “Control”, or “Command” on a Mac, to select more than one. ')
         }
         
         

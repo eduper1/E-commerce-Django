@@ -1,0 +1,24 @@
+body {
+    /* background-color: beige; */
+    /* background-color: black; */
+}
+
+/* h1 {
+    color: rgb(0, 253, 253);
+} */
+.card .read-more:hover{
+    /* font-size: 14px; */
+}
+
+.card:hover{
+    /* box-shadow: 8px 8px 8px blue; */
+    transform:scale(1.02);
+}
+
+.card{
+  /* height:200px; */
+  /* width:200px; */
+  border:1px solid black;
+  transition:.3s;
+  /* margin: 3rem; */
+}

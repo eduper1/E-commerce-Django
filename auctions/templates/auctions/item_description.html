@@ -1,0 +1,114 @@
+{% extends 'auctions/layout.html' %} 
+{% load static %}   {% load crispy_forms_tags %}
+{% block body %}
+
+<div class="container">
+
+    <div >
+        <h2 class="text-capitalize" >{{detail.item_name}}</h2>
+        <img class="img-fluid w-50 rounded mt-4 d-block" src="{{detail.item_image.url}}" alt="rose flower" width="100px" height="auto">
+        <br>
+        <p class="mt-4">{{detail.item_description}}</p>
+        <p class="mt-4">Price: {{detail.starting_price}}</p>
+        <p>Date published: {{detail.publication_date}} </p>
+        <p>        
+            created by: {{detail.item_owner}} <br> 
+        </p>
+        <P>
+            {{total_bid}} bid(s) so far. <br>
+            {% if details.listings.last != '' %}
+            <p>Last Bid placed:
+                {{detail.listings.last}}
+            </p>
+            {% endif %}
+        </p>
+        <p> {% if user.is_authenticated %}
+            {% if user == detail.item_owner  and  detail.active_item == True %}
+                    <a class="btn btn-primary text-capitalize text-light mb-4" href="{% url 'CloseBid' detail.id %}"> Close this bid </a>
+                {% else %}
+                    {% if detail.bid_winner != '' %}
+                        <p> The bid is closed and the bid winner is
+                            <span class="bg-success text-white rounded px-2 text-capitalize">{{detail.bid_winner}}.</span>
+                        </p>
+                        {% endif %}
+                        
+                        {% endif %}
+                        {% else %}
+                        {% if detail.bid_winner == 0 %}
+                        <p> huisdu </p>
+                        {% endif %}
+                        {% endif %}
+                    </p>
+                    {% if is_fav %}
+                        <a class="btn btn-warning text-capitalize text-light mb-4 mt-4" href="{% url 'addwatchlist' detail.id %}"> REMOVE.</a>
+                    {% else %}
+                        <a class="btn btn-success text-capitalize text-light mb-4 mt-4" href="{% url 'addwatchlist' detail.id %}"> add to your watch list.</a>
+                    {% endif %}
+    <hr>
+        <dl class="list-group list-group-flush"> 
+            <dt> 
+                Category:
+            </dt>
+            <dd>
+                <div class="row mt-4">
+                    {% for category in detail.item_category.all %} 
+                        <div class="col-md-4 col-sm-6">
+                            <ul><li class="list-group-item">
+                                {{category}}
+                            </li></ul> 
+                        </div>
+                        {% endfor %}
+                    </div>
+                </dd>
+            </dl>
+            <br>
+        </div>
+        <hr>
+        <div class="mb-4">
+            {% if user.is_authenticated and detail.active_item == True %}
+            <br>
+            <form action="{% url 'placeBid' detail.id%}" method="POST">
+                {% csrf_token %}
+                {{bid|crispy}}
+                <button class="btn btn-success text-capitalize text-light mb-4" type=" submit ">Place Bid</button>
+            </form>
+            {{error}}
+            <hr>
+            {% endif %}
+            <br>
+            <br>
+    <div>
+        <dl> 
+            <dt> 
+                Comments:
+            </dt>
+            <dd>
+                {% for comment in comments %} 
+                <ul><li>
+                    {{comment}}
+                </li></ul> 
+                {% empty %}
+                <ul><li>
+                    No comments currently
+                </li></ul>
+                {% endfor %}
+            </dd>
+        </dl>
+    </div>
+    {% if user.is_authenticated %}
+     <br>
+        <form action="{% url 'comment' detail.id%}" method="POST">
+            {% csrf_token %}
+            {{com_form|crispy}}
+            <button class="btn btn-success text-capitalize text-light mb-4"  type=" submit ">Post</button>
+        </form>
+    {% else %}
+        <p>
+        <a href="{% url 'login' %}">Sign in.</a> or  <a href="{% url 'register' %}">Sign up.</a> to comment/bid on this post.
+        </p>
+    {% endif %}
+    </div>
+
+</div>
+
+{% endblock body %}

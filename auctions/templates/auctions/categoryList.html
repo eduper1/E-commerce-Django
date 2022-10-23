@@ -1,37 +1,42 @@
 {% extends "auctions/layout.html" %} {% load static %}
 {% block body %}
-{% comment %} TODO: Add the category searched in the hearder  {% endcomment %}
-<h2> Associated List(s) with {{title.category_type}} category</h2>
-{% for page in pages %}
-    <a href= "{% url 'auctions_list' page.id %}">
-        <h2>{{page.auc_title}}</h2>
-        <aside>{{page.auc_category}}</aside>
-    </a>
 
-    <img src="{{page.auc_image.url}}" alt="rose flower" width="100vw" height="auto">
-    <p>Description: {{page.auc_details}}</p>
-    <p>Price: {{page.auc_price}}</p>
-    <dl> 
-        <dt> 
-            Category:
-        </dt>
-        <dd>
-            {% for category in page.auctions.all %} 
-            <ul><li>
-                {{category}}
-            </li></ul> 
-            {% endfor %}
-        </dd>
-    </dl>
-{% empty %}
-    <p>List(s) with category {{title.category_type}} not found. </p>
-    {% comment %} TODO: Add the category searched in the hearder  {% endcomment %}
-    <p>
-        Create an Auction with 
-        <a href={% url 'create_listing' %} > 
-            {{title.category_type}}
-        </a>
-        as category.
-    </p>
-{% endfor %}
+<div class="container"> 
+
+    
+    <div class="row mt-4">
+        
+        {% for page in pages %}
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+            
+            <div class="card-deck card shadow p-2 bg-white mx-2">
+                <img class="card-img-top" src="{{page.item_image.url}}" alt="rose flower" width="100vw" height="auto">
+                <div class="card-body">
+                    
+                    <h4 class="card-title text-capitalize ">{{page.item_name}}</h4>
+                    <p class="card-text">Description: {{page.item_description|truncatewords:10}}</p>
+                    <p>{{page.auc_category}}</p>
+                    <p class="card-text">Price: {{page.starting_price}}</p>
+                    <dl> 
+                        <dt> 
+                            Category:
+                        </dt>
+                        <dd>
+                            {% for category in page.item_category.all|slice:":2" %} 
+                            <ul><li>
+                                {{category}}
+                            </li></ul> 
+                            {% endfor %}
+                        </dd>
+                    </dl>
+                    <a class="btn btn-primary stretched-link" href="{% url 'view_item' page.id %}">View Item</a>
+                    
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
 {% endblock body %}

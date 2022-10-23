@@ -7,28 +7,41 @@
     Watchlist
 </h2>
 
-<div>
-    {% for list in lists %}
-            <a href="{% url 'auctions_list' list.id %}">
-                <h2>{{list.auc_title}}</h2>
-                <aside>{{list.auc_category}}</aside>
-            </a>
-            <img src="{{list.auc_image.url}}" alt="rose flower" width="100vw" height="auto">
-            <p>Description: {{list.auc_details}}</p>
-            <p>Price: {{list.auc_price}}</p>
-        <dl> 
-            <dt> 
-                Category:
-            </dt>
-            <dd>
-                {% for category in list.auctions.all %} 
-                <ul><li>
-                    {{category}}
-                </li></ul> 
-                {% endfor %}
-            </dd>
-        </dl>
+<div class="container"> 
 
+    
+    <div class="row mt-4">
+        
+        {% for list in pages %}
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+            
+            <div class="card-deck card shadow p-2 bg-white mx-2">
+                <img class="card-img-top" src="{{list.item_image.url}}" alt="rose flower" width="100vw" height="auto">
+                <div class="card-body">
+                    
+                    <h4 class="card-title text-capitalize ">{{list.item_name}}</h4>
+                    <p class="card-text">Description: {{list.item_description|truncatewords:10}}</p>
+                    <p>{{list.auc_category}}</p>
+                    <p class="card-text">Price: {{list.starting_price}}</p>
+                    <dl> 
+                        <dt> 
+                            Category:
+                        </dt>
+                        <dd>
+                            {% for category in list.item_category.all|slice:":2" %} 
+                            <ul><li>
+                                {{category}}
+                            </li></ul> 
+                            {% endfor %}
+                        </dd>
+                    </dl>
+                    <a class="btn btn-primary stretched-link" href="{% url 'view_item' list.id %}">View Item</a>
+                    
+                </div>
+
+            </div>
+        </div>
         {% endfor %}
     </div>
-{% endblock %}
+</div>
+    {% endblock %}
